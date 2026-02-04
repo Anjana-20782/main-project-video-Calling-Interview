@@ -38,13 +38,13 @@ app.get('/api', (req, res) => {
 });
 
 if (ENV.NODE_ENV === 'production') {
-  app.use(
-    express.static(path.join(process.cwd(), 'frontend', 'dist'))
-  );
+  const root = process.cwd(); // this points to project root on Render
+
+  app.use(express.static(path.join(root, 'frontend', 'dist')));
 
   app.get('*', (req, res) => {
     res.sendFile(
-      path.join(process.cwd(), 'frontend', 'dist', 'index.html')
+      path.join(root, 'frontend', 'dist', 'index.html')
     );
   });
 }
