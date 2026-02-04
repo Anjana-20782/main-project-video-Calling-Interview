@@ -2,11 +2,9 @@
   "name": "main-project-video-calling-interview",
   "private": true,
   "version": "1.0.0",
-
   "engines": {
-    "node": ">=20"
+    "node": "18.x"
   },
-
   "scripts": {
     "build": "cd frontend && npm install && npm run build && rm -rf ../backend/dist && mv dist ../backend/dist",
     "start": "cd backend && npm install && node src/server.js"
