@@ -43,6 +43,7 @@ if(ENV.NODE_ENV === "production")
     });
 }
 
+//starting server
 
 const startServer = async () => {
 
