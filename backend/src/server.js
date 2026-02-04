@@ -39,15 +39,16 @@ app.get('/api', (req, res) => {
 
 if (ENV.NODE_ENV === 'production') {
   app.use(
-    express.static(path.join(__dirname, '../../frontend/dist'))
+    express.static(path.join(process.cwd(), 'frontend', 'dist'))
   );
 
   app.get('*', (req, res) => {
     res.sendFile(
-      path.join(__dirname, '../../frontend/dist/index.html')
+      path.join(process.cwd(), 'frontend', 'dist', 'index.html')
     );
   });
 }
+
 
 //server started
 connectDB().then(() => {
