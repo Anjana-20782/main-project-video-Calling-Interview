@@ -1,13 +1,14 @@
 {
   "name": "main-project-video-calling-interview",
- "private": true,
+  "private": true,
   "version": "1.0.0",
-  "engines": {
-    "node": "18.x"
-  },
-  "scripts": {
-    "build": "cd frontend && npm ci && npm run build && rm -rf ../backend/dist && mv dist ../backend/dist",
-    "start": "cd backend && npm ci && node src/server.js"
-  }
 
+  "engines": {
+    "node": ">=20"
+  },
+
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && rm -rf ../backend/dist && mv dist ../backend/dist",
+    "start": "cd backend && npm install && node src/server.js"
+  }
 }
