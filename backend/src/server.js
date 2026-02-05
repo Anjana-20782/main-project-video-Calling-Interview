@@ -62,9 +62,9 @@ if (ENV.NODE_ENV === "production") {
 connectDB()
   .then(() => {
     app.listen(ENV.PORT, () => {
-      console.log(`🚀 Server running on port ${ENV.PORT}`);
+      console.log(` Server running on port ${ENV.PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ Database connection failed:", err);
+    console.error(" Database connection failed:", err);
   });
