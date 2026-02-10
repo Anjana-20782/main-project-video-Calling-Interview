@@ -1,5 +1,5 @@
 import {Link} from "react-router"
-import {ArrowRightIcon, SparklesIcon} from "lucide-react"
+import {ArrowRightIcon, SparklesIcon, ZapIcon} from "lucide-react"
 import {SignInButton} from "@clerk/clerk-react"
 
 function HomePage() {
@@ -37,6 +37,24 @@ function HomePage() {
             </div>
         </nav>
 
+        {/* Hero section */}
+
+        <div className="max-w-7xl mx-auto px-4 py-20">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+                    {/* Left content */}
+
+                    <div className="space-y-8">
+                        <div className="badge badge-primary badge-md">
+                            <ZapIcon className="size-4" />
+                            Real time collabration
+                        </div>
+                        <h1 className="text-5xl lg-text-7xl ">
+
+                        </h1>
+                    </div>
+              </div>
+        </div>
     </div>
   )
 }
