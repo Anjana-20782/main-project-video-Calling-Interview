@@ -42,7 +42,7 @@ function HomePage() {
 
       {/* Hero section */}
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-15">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
 
@@ -96,7 +96,34 @@ function HomePage() {
               </button>
             </div>
 
+          {/* STATS */}
+            <div className="stats stats-vertical lg:stats-horizontal bg-base-100 shadow-lg">
+              <div className="stat">
+                <div className="stat-value text-primary">10K+</div>
+                <div className="stat-title">Active Users</div>
+              </div>
+              <div className="stat">
+                <div className="stat-value text-secondary">50K+</div>
+                <div className="stat-title">Sessions</div>
+              </div>
+              <div className="stat">
+                <div className="stat-value text-accent">99.9%</div>
+                <div className="stat-title">Uptime</div>
+              </div>
+            </div>
+          
+
+            
           </div>
+
+            {/* RIGHT IMAGE */}
+          
+          <img
+            src="/hero.png"
+            alt="CodeCollab Platform"
+            className="w-full h-auto rounded-3xl shadow-2xl border-4 border-base-100 hover:scale-105 transition-transform duration-500"
+          />
+
         </div>
       </div>
     </div>
