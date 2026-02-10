@@ -17,7 +17,7 @@ function CodeEditorPanel({
           <img
             src={LANGUAGE_CONFIG[selectedLanguage].icon}
             alt={LANGUAGE_CONFIG[selectedLanguage].name}
-            className="size-6"
+            className="size-5"
           />
           <select className="select select-sm" value={selectedLanguage} onChange={onLanguageChange}>
             {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
@@ -31,12 +31,12 @@ function CodeEditorPanel({
         <button className="btn btn-primary btn-sm gap-2" disabled={isRunning} onClick={onRunCode}>
           {isRunning ? (
             <>
-              <Loader2Icon className="size-4 animate-spin" />
+              <Loader2Icon className="size-3 animate-spin" />
               Running...
             </>
           ) : (
             <>
-              <PlayIcon className="size-4" />
+              <PlayIcon className="size-3" />
               Run Code
             </>
           )}
@@ -51,7 +51,7 @@ function CodeEditorPanel({
           onChange={onCodeChange}
           theme="vs-dark"
           options={{
-            fontSize: 16,
+            fontSize: 13,
             lineNumbers: "on",
             scrollBeyondLastLine: false,
             automaticLayout: true,
