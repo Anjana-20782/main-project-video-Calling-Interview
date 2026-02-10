@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRightIcon, CheckIcon, SparklesIcon, ZapIcon } from "lucide-react";
+import { ArrowRightIcon, CheckIcon, SparklesIcon, VideoIcon, ZapIcon } from "lucide-react";
 import { SignInButton } from "@clerk/clerk-react";
 
 function HomePage() {
@@ -65,6 +65,7 @@ function HomePage() {
               Connect face-to-face, code in real-time, and ace your technical interviews.
             </p>
 
+             {/* FEATURE PILLS */}
              <div className="flex flex-wrap gap-3">
               <div className="badge badge-md badge-outline">
                 <CheckIcon className="size-3 text-success" />
@@ -78,6 +79,21 @@ function HomePage() {
                 <CheckIcon className="size-3 text-success" />
                 Multi-Language
               </div>
+            </div>
+
+             {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <SignInButton mode="modal">
+                <button className="btn btn-primary btn-md">
+                  Start Coding Now
+                  <ArrowRightIcon className="size-4" />
+                </button>
+              </SignInButton>
+
+              <button className="btn btn-outline btn-md">
+                <VideoIcon className="size-4" />
+                Watch Demo
+              </button>
             </div>
 
           </div>
