@@ -19,9 +19,9 @@ function ActiveSessions({ sessions, isLoading, isUserInSession }) {
           {/* TITLE AND ICON */}
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-br from-primary to-secondary rounded-xl">
-              <ZapIcon className="size-5" />
+              <ZapIcon className="size-4" />
             </div>
-            <h2 className="text-2xl font-black">Live Sessions</h2>
+            <h2 className="text-xl font-black">Live Sessions</h2>
           </div>
 
           <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ function ActiveSessions({ sessions, isLoading, isUserInSession }) {
         <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <LoaderIcon className="size-10 animate-spin text-primary" />
+              <LoaderIcon className="size-5 animate-spin text-primary" />
             </div>
           ) : sessions.length > 0 ? (
             sessions.map((session) => (
