@@ -12,6 +12,7 @@ export const initializeStreamClient = async (user, token) => {
   if (client) {
     await disconnectStreamClient();
   }
+// console.log("heelo");
 
   if (!apiKey) throw new Error("Stream API key is not provided.");
 
