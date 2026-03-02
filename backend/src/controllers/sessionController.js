@@ -162,3 +162,27 @@ export async function endSession(req, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export const deleteSession = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id; // Attached by protectRoute
+
+    const session = await Session.findById(id);
+
+    if (!session) {
+      return res.status(404).json({ message: "Session not found" });
+    }
+
+    // Compare MongoDB IDs as strings
+    if (session.host.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Not authorized to delete this session" });
+    }
+
+    await Session.findByIdAndDelete(id);
+    res.status(200).json({ message: "Session deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+

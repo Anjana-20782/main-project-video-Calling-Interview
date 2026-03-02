@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
-import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSessions";
+import { useActiveSessions, useCreateSession, useMyRecentSessions ,useDeleteSession} from "../hooks/useSessions";
 
 import Navbar from "../components/Navbar";
 import WelcomeSection from "../components/WelcomeSection";
@@ -17,6 +17,7 @@ function DashboardPage() {
   const [roomConfig, setRoomConfig] = useState({ problem: "", difficulty: "" });
 
   const createSessionMutation = useCreateSession();
+  const deleteMutation = useDeleteSession();
 
   const { data: activeSessionsData, isLoading: loadingActiveSessions } = useActiveSessions();
   const { data: recentSessionsData, isLoading: loadingRecentSessions } = useMyRecentSessions();
@@ -36,6 +37,13 @@ function DashboardPage() {
         },
       }
     );
+  };
+
+  const handleDeleteSession = (sessionId) => {
+    // Basic confirmation so users don't delete by accident
+    if (window.confirm("Are you sure you want to delete this session?")) {
+      deleteMutation.mutate(sessionId);
+    }
   };
 
   const activeSessions = activeSessionsData?.sessions || [];
@@ -64,12 +72,14 @@ function DashboardPage() {
               sessions={activeSessions}
               isLoading={loadingActiveSessions}
               isUserInSession={isUserInSession}
+              onDelete={handleDeleteSession}
             />
           </div>
 
           <RecentSessions sessions={recentSessions} isLoading={loadingRecentSessions} />
         </div>
       </div>
+      
 
       <CreateSessionModal
         isOpen={showCreateModal}
@@ -79,6 +89,8 @@ function DashboardPage() {
         onCreateRoom={handleCreateRoom}
         isCreating={createSessionMutation.isPending}
       />
+
+      
     </>
   );
 }
