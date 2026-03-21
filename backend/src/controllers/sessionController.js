@@ -1,4 +1,5 @@
 import { chatClient, streamClient } from "../lib/stream.js";
+import { ENV } from "../lib/env.js";
 import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
@@ -174,8 +175,10 @@ export const deleteSession = async (req, res) => {
       return res.status(404).json({ message: "Session not found" });
     }
 
-    // Compare MongoDB IDs as strings
-    if (session.host.toString() !== userId.toString()) {
+    const isHost = session.host.toString() === userId.toString();
+    const isAdmin = req.user?.clerkId === ENV.ADMIN_CLERK_ID;
+
+    if (!isHost && !isAdmin) {
       return res.status(403).json({ message: "Not authorized to delete this session" });
     }
 
@@ -183,6 +186,20 @@ export const deleteSession = async (req, res) => {
     res.status(200).json({ message: "Session deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getAllSessionsAdmin(_, res) {
+  try {
+    const sessions = await Session.find()
+      .populate("host", "name profileImage email clerkId")
+      .populate("participant", "name profileImage email clerkId")
+      .sort({ createdAt: -1 })
+      .limit(200);
+
+    return res.status(200).json({ sessions });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to fetch all sessions" });
   }
 }
 

@@ -31,6 +31,15 @@ export const useMyRecentSessions = () => {
   return result;
 };
 
+export const useAllSessionsAdmin = () => {
+  const result = useQuery({
+    queryKey: ["allSessionsAdmin"],
+    queryFn: sessionApi.getAllSessionsAdmin,
+  });
+
+  return result;
+};
+
 export const useSessionById = (id) => {
   const result = useQuery({
     queryKey: ["session", id],

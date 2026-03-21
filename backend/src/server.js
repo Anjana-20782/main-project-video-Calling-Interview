@@ -13,6 +13,7 @@ import { inngest, functions } from "./lib/inngest.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoute.js"
 import codeExecutionRoutes from "./routes/codeExecutionRoutes.js";
+import problemRoutes from "./routes/problemRoutes.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/code", codeExecutionRoutes);
+app.use("/api/problems", problemRoutes);
 
 app.use("/health", (req,res) => {
   res.status(200).json({ message: "api is up and running" })

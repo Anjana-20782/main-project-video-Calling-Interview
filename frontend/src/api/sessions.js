@@ -14,6 +14,10 @@ export const sessionApi = {
     const response = await axiosInstance.get("/sessions/my-recent");
     return response.data;
   },
+  getAllSessionsAdmin: async () => {
+    const response = await axiosInstance.get("/sessions/admin/all");
+    return response.data;
+  },
 
   getSessionById: async (id) => {
     const response = await axiosInstance.get(`/sessions/${id}`);

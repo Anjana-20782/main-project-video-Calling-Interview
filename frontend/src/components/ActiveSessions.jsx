@@ -11,10 +11,12 @@ import {
 import { Link } from "react-router";
 import { useUser } from "@clerk/clerk-react"; // 2. Need this to check who the host is
 import { getDifficultyBadgeClass } from "../lib/utils";
+import { isAdminUser } from "../lib/admin";
 
 // 3. Added onDelete to props
 function ActiveSessions({ sessions, isLoading, isUserInSession, onDelete }) {
   const { user } = useUser();
+  const isAdmin = isAdminUser(user);
 
   return (
     <div className="lg:col-span-2 card bg-base-100 border-2 border-primary/20 hover:border-primary/30 h-full">
@@ -81,7 +83,7 @@ function ActiveSessions({ sessions, isLoading, isUserInSession, onDelete }) {
 
                     {/* RIGHT SIDE ACTIONS (Rejoin + Delete) */}
                     <div className="flex items-center gap-2">
-                      {isHost && (
+                      {(isHost || isAdmin) && (
                         <button
                           onClick={() => onDelete(session._id)}
                           className="btn btn-ghost btn-sm text-error hover:bg-error/10"

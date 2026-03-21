@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { PROBLEMS } from "../data/problems";
 import Navbar from "../components/Navbar";
 
 import {
@@ -13,6 +12,7 @@ import ProblemDescription from "../components/ProblemDescription";
 import OutputPanel from "../components/OutputPanel";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import { executeCode } from "../lib/piston";
+import { useProblems } from "../hooks/useProblems";
 
 import toast from "react-hot-toast";
 import confetti from "canvas-confetti";
@@ -20,28 +20,36 @@ import confetti from "canvas-confetti";
 function ProblemPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { problemMap, problems } = useProblems();
 
-  const [currentProblemId, setCurrentProblemId] = useState("two-sum");
+  const fallbackProblemId = id || "two-sum";
+  const [currentProblemId, setCurrentProblemId] = useState(fallbackProblemId);
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript);
+  const [code, setCode] = useState("");
   const [output, setOutput] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  const currentProblem = PROBLEMS[currentProblemId];
+  const currentProblem = problemMap[currentProblemId];
 
   // update problem when URL param changes
   useEffect(() => {
-    if (id && PROBLEMS[id]) {
+    if (id && problemMap[id]) {
       setCurrentProblemId(id);
-      setCode(PROBLEMS[id].starterCode[selectedLanguage]);
+      setCode(problemMap[id].starterCode?.[selectedLanguage] || "");
       setOutput(null);
     }
-  }, [id, selectedLanguage]);
+  }, [id, selectedLanguage, problemMap]);
+
+  useEffect(() => {
+    if (!id && problems.length > 0) {
+      navigate(`/problem/${problems[0].id}`);
+    }
+  }, [id, navigate, problems]);
 
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
     setSelectedLanguage(newLang);
-    setCode(currentProblem.starterCode[newLang]);
+    setCode(currentProblem?.starterCode?.[newLang] || "");
     setOutput(null);
   };
 
@@ -87,6 +95,7 @@ function ProblemPage() {
   };
 
   const handleRunCode = async () => {
+    if (!currentProblem) return;
     setIsRunning(true);
     setOutput(null);
 
@@ -111,6 +120,15 @@ function ProblemPage() {
     }
   };
 
+  if (!currentProblem) {
+    return (
+      <div className="min-h-screen bg-base-100">
+        <Navbar />
+        <div className="max-w-4xl mx-auto px-4 py-8">Loading problem...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen bg-base-100 flex flex-col">
       <Navbar />
@@ -123,7 +141,7 @@ function ProblemPage() {
               problem={currentProblem}
               currentProblemId={currentProblemId}
               onProblemChange={handleProblemChange}
-              allProblems={Object.values(PROBLEMS)}
+              allProblems={problems}
             />
           </Panel>
 

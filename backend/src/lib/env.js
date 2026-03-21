@@ -14,5 +14,6 @@ export const ENV= {
     STREAM_API_SECRET:process.env.STREAM_API_SECRET,
     JUDGE0_API_URL: process.env.JUDGE0_API_URL,
     JUDGE0_API_KEY: process.env.JUDGE0_API_KEY,
-    JUDGE0_API_HOST: process.env.JUDGE0_API_HOST
+    JUDGE0_API_HOST: process.env.JUDGE0_API_HOST,
+    ADMIN_CLERK_ID: process.env.ADMIN_CLERK_ID
 }

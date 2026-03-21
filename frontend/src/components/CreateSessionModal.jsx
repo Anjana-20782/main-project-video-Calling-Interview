@@ -1,5 +1,4 @@
 import { Code2Icon, LoaderIcon, PlusIcon } from "lucide-react";
-import { PROBLEMS } from "../data/problems";
 
 function CreateSessionModal({
   isOpen,
@@ -8,9 +7,8 @@ function CreateSessionModal({
   setRoomConfig,
   onCreateRoom,
   isCreating,
+  problems = [],
 }) {
-  const problems = Object.values(PROBLEMS);
-
   if (!isOpen) return null;
 
   return (

@@ -7,9 +7,11 @@ import DashboardPage from "./pages/DashboardPage";
 import ProblemPage from "./pages/ProblemPage";
 import ProblemsPage from "./pages/ProblemsPage";
 import SessionPage from "./pages/SessionPage";
+import AdminPage from "./pages/AdminPage";
+import { isAdminUser } from "./lib/admin";
 
 function App() {
-  const { isSignedIn, isLoaded } = useUser();
+  const { isSignedIn, isLoaded, user } = useUser();
 
   // this will get rid of the flickering effect
   if (!isLoaded) return null;
@@ -23,6 +25,10 @@ function App() {
         <Route path="/problems" element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />} />
         <Route path="/problem/:id" element={isSignedIn ? <ProblemPage /> : <Navigate to={"/"} />} />
         <Route path="/session/:id" element={isSignedIn ? <SessionPage /> : <Navigate to={"/"} />} />
+        <Route
+          path="/admin"
+          element={isSignedIn && isAdminUser(user) ? <AdminPage /> : <Navigate to={"/dashboard"} />}
+        />
       </Routes>
 
       <Toaster toastOptions={{ duration: 3000 }} />
