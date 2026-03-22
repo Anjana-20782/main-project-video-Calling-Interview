@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import { isAdminUser } from "../lib/admin";
 import { useAllSessionsAdmin, useDeleteSession } from "../hooks/useSessions";
@@ -27,6 +28,26 @@ function parseLines(text) {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+/** Safe parse for Examples JSON — invalid JSON was failing silently before. */
+function parseExamplesJson(raw) {
+  const trimmed = (raw ?? "").trim();
+  if (!trimmed) return [];
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (!Array.isArray(parsed)) {
+      throw new Error("Examples must be a JSON array");
+    }
+    return parsed.map((ex) => ({
+      input: ex?.input != null ? String(ex.input) : "",
+      output: ex?.output != null ? String(ex.output) : "",
+      explanation: ex?.explanation != null ? String(ex.explanation) : "",
+    }));
+  } catch (e) {
+    if (e?.message === "Examples must be a JSON array") throw e;
+    throw new Error("Examples must be valid JSON. Use [] if you have no examples.");
+  }
 }
 
 function mapProblemToForm(problem) {
@@ -78,33 +99,40 @@ function AdminPage() {
     );
   }
 
-  const buildPayload = () => ({
-    id: form.id.trim(),
-    title: form.title.trim(),
-    difficulty: form.difficulty,
-    category: form.category.trim(),
-    description: {
-      text: form.descriptionText.trim(),
-      notes: parseLines(form.notes),
-    },
-    examples: JSON.parse(form.examplesJson || "[]"),
-    constraints: parseLines(form.constraints),
-    starterCode: {
-      javascript: form.jsStarter,
-      python: form.pyStarter,
-      java: form.javaStarter,
-    },
-    expectedOutput: {
-      javascript: form.jsExpected,
-      python: form.pyExpected,
-      java: form.javaExpected,
-    },
-  });
+  const buildPayload = () => {
+    const examples = parseExamplesJson(form.examplesJson);
+    return {
+      id: form.id.trim(),
+      title: form.title.trim(),
+      difficulty: form.difficulty,
+      category: form.category.trim(),
+      description: {
+        text: form.descriptionText.trim(),
+        notes: parseLines(form.notes),
+      },
+      examples,
+      constraints: parseLines(form.constraints),
+      starterCode: {
+        javascript: form.jsStarter,
+        python: form.pyStarter,
+        java: form.javaStarter,
+      },
+      expectedOutput: {
+        javascript: form.jsExpected,
+        python: form.pyExpected,
+        java: form.javaExpected,
+      },
+    };
+  };
 
   const onSaveProblem = async () => {
     try {
+      if (!form.id.trim() || !form.title.trim() || !form.descriptionText.trim()) {
+        toast.error("Please fill Problem ID, Title, and Description.");
+        return;
+      }
+
       const payload = buildPayload();
-      if (!payload.id || !payload.title || !payload.description.text) return;
 
       if (editingId) {
         await updateProblem.mutateAsync({ id: editingId, payload });
@@ -113,7 +141,16 @@ function AdminPage() {
       }
       setEditingId(null);
       setForm(initialForm);
-    } catch (_) {}
+    } catch (err) {
+      // API errors are toasts from mutation onError; JSON/validation errors land here
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Could not save problem.";
+      if (!err?.response) {
+        toast.error(msg);
+      }
+    }
   };
 
   const onEditProblem = (problem) => {

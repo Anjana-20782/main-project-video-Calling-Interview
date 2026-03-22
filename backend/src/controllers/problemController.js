@@ -30,7 +30,17 @@ export async function createProblem(req, res) {
 
     return res.status(201).json({ problem });
   } catch (error) {
-    return res.status(500).json({ message: "Failed to create problem" });
+    console.error("createProblem:", error);
+    if (error.code === 11000) {
+      return res.status(409).json({ message: "Problem id or title already exists" });
+    }
+    const msg =
+      error.name === "ValidationError"
+        ? Object.values(error.errors || {})
+            .map((e) => e.message)
+            .join(" ")
+        : "Failed to create problem";
+    return res.status(500).json({ message: msg });
   }
 }
 

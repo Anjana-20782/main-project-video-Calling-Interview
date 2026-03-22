@@ -32,7 +32,15 @@ export function useCreateProblem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: problemApi.createProblem,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const created = data?.problem;
+      if (created) {
+        queryClient.setQueryData(["problems"], (prev) => {
+          const list = prev?.problems ?? [];
+          if (list.some((p) => p.id === created.id)) return prev;
+          return { problems: [created, ...list] };
+        });
+      }
       toast.success("Problem added");
       queryClient.invalidateQueries({ queryKey: ["problems"] });
     },
@@ -44,7 +52,18 @@ export function useUpdateProblem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: problemApi.updateProblem,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const updated = data?.problem;
+      if (updated) {
+        queryClient.setQueryData(["problems"], (prev) => {
+          const list = prev?.problems ?? [];
+          const idx = list.findIndex((p) => p.id === updated.id);
+          if (idx === -1) return { problems: [updated, ...list] };
+          const next = [...list];
+          next[idx] = updated;
+          return { problems: next };
+        });
+      }
       toast.success("Problem updated");
       queryClient.invalidateQueries({ queryKey: ["problems"] });
     },
